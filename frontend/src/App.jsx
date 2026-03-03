@@ -1,7 +1,13 @@
+import { useState } from 'react';
 import './App.css';
 import ProductGrid from './components/ProductGrid.jsx';
+import CartPanel from './components/CartPanel.jsx';
+import { useCart } from './context/CartContext.jsx';
 
 function App() {
+  const [showCart, setShowCart] = useState(false);
+  const { itemCount } = useCart();
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -14,8 +20,13 @@ function App() {
           <button type="button" className="nav-button nav-button--active">
             Products
           </button>
-          <button type="button" className="nav-button" disabled>
+          <button
+            type="button"
+            className="nav-button"
+            onClick={() => setShowCart((open) => !open)}
+          >
             Cart
+            {itemCount > 0 ? <span className="cart-count">{itemCount}</span> : null}
           </button>
         </nav>
       </header>
@@ -30,6 +41,8 @@ function App() {
           <ProductGrid />
         </section>
       </main>
+
+      <CartPanel open={showCart} />
 
       <footer className="app-footer">
         <small className="muted-text">

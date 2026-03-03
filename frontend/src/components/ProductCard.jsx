@@ -1,4 +1,8 @@
+import { useCart } from '../context/CartContext.jsx';
+
 export default function ProductCard({ product }) {
+  const { addItem } = useCart();
+
   return (
     <article className="product-card">
       <header className="product-card__header">
@@ -8,6 +12,13 @@ export default function ProductCard({ product }) {
       <p className="product-card__price">
         ₹{product.price.toFixed(2)}
       </p>
+      <button
+        type="button"
+        className="product-card__add"
+        onClick={() => addItem(product)}
+      >
+        Add to cart
+      </button>
     </article>
   );
 }
