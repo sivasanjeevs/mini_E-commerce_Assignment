@@ -131,6 +131,12 @@ export default function CartPanel({ open }) {
 
           {checkoutState.breakdown ? (
             <div className="checkout-breakdown">
+              {checkoutState.breakdown.orderId ? (
+                <div className="checkout-row">
+                  <span className="muted-text">Order ID</span>
+                  <span>{checkoutState.breakdown.orderId}</span>
+                </div>
+              ) : null}
               <div className="checkout-row">
                 <span className="muted-text">Subtotal</span>
                 <span>₹{checkoutState.breakdown.subtotal.toFixed(2)}</span>

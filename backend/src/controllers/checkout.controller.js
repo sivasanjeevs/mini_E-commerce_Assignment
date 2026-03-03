@@ -1,4 +1,5 @@
 import { calculatePricing } from '../services/pricing.service.js';
+import Order from '../models/order.model.js';
 
 export async function checkout(req, res) {
   try {
@@ -10,7 +11,19 @@ export async function checkout(req, res) {
 
     const pricing = await calculatePricing(items);
 
+    if (!pricing.lines.length) {
+      return res.status(400).json({ message: 'Cart is empty' });
+    }
+
+    const order = await Order.create({
+      items: pricing.lines,
+      discounts: pricing.discounts,
+      subtotal: pricing.subtotal,
+      total: pricing.total,
+    });
+
     return res.json({
+      orderId: order._id,
       subtotal: pricing.subtotal,
       discounts: pricing.discounts,
       total: pricing.total,

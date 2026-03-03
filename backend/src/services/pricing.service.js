@@ -3,11 +3,11 @@ import Product from '../models/product.model.js';
 /**
  * Given cart items from client, look up products and calculate pricing.
  * @param {Array<{ productId: string, quantity: number }>} cartItems
- * @returns {Promise<{ subtotal: number, discounts: Array<{ label: string, amount: number }>, total: number }>}
+ * @returns {Promise<{ lines: Array, subtotal: number, discounts: Array<{ label: string, amount: number }>, total: number }>}
  */
 export async function calculatePricing(cartItems) {
   if (!Array.isArray(cartItems) || cartItems.length === 0) {
-    return { subtotal: 0, discounts: [], total: 0 };
+    return { lines: [], subtotal: 0, discounts: [], total: 0 };
   }
 
   const productIds = cartItems.map((item) => item.productId);
@@ -73,6 +73,6 @@ export async function calculatePricing(cartItems) {
   const totalDiscount = discounts.reduce((sum, d) => sum + d.amount, 0);
   const total = Math.max(0, subtotal - totalDiscount);
 
-  return { subtotal, discounts, total };
+  return { lines, subtotal, discounts, total };
 }
 
