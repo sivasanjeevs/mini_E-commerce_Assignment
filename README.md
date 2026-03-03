@@ -122,19 +122,19 @@ Then open the Vite dev server URL in your browser.
 - **Products page**
 
   ```markdown
-  ![Products page](assets/Product_Catalog.png)
+  ![Products page](Product_Catalog.png)
   ```
 
 - **Cart page**
 
   ```markdown
-  ![Cart page](assets/Cart.png)
+  ![Cart page](Cart.png)
   ```
 
 - **Order confirmation (bill) page**
 
   ```markdown
-  ![Order confirmation page](assets/order_placed.png)
+  ![Order confirmation page](order_placed.png)
   ```
 
 ## Frontend behaviour and pages
