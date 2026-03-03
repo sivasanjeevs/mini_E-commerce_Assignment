@@ -1,0 +1,29 @@
+# Node / backend
+node_modules/
+npm-debug.log*
+pnpm-lock.yaml
+yarn.lock
+
+# Build output
+dist/
+build/
+
+# Env and secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
