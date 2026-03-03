@@ -121,21 +121,20 @@ Then open the Vite dev server URL in your browser.
 ### UI screenshots
 - **Products page**
 
-  ```markdown
+  
   ![Products page](Product_Catalog.png)
-  ```
 
 - **Cart page**
 
-  ```markdown
+  
   ![Cart page](Cart.png)
-  ```
+
 
 - **Order confirmation (bill) page**
 
-  ```markdown
+  
   ![Order confirmation page](order_placed.png)
-  ```
+
 
 ## Frontend behaviour and pages
 
