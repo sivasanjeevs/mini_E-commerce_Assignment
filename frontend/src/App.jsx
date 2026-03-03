@@ -1,54 +1,46 @@
-import { useState } from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
 import './App.css';
-import ProductGrid from './components/ProductGrid.jsx';
-import CartPanel from './components/CartPanel.jsx';
 import { useCart } from './context/CartContext.jsx';
 
 function App() {
-  const [showCart, setShowCart] = useState(false);
   const { itemCount } = useCart();
 
   return (
     <div className="app-shell">
       <header className="app-header">
-        <div>
+        <div className="app-header__title">
           <h1>Simple E‑Commerce</h1>
-          <p className="muted-text">Browse products and build your cart.</p>
+          <p className="muted-text">
+            <span className="discount-pill">10% off categories over ₹150</span>
+            <span className="discount-pill">5% off when you buy 3+ of a product</span>
+          </p>
         </div>
 
         <nav className="app-nav">
-          <button type="button" className="nav-button nav-button--active">
+          <NavLink
+            to="/products"
+            className={({ isActive }) =>
+              `nav-button ${isActive ? 'nav-button--active' : ''}`
+            }
+          >
             Products
-          </button>
-          <button
-            type="button"
-            className="nav-button"
-            onClick={() => setShowCart((open) => !open)}
+          </NavLink>
+          <NavLink
+            to="/cart"
+            className={({ isActive }) =>
+              `nav-button ${isActive ? 'nav-button--active' : ''}`
+            }
           >
             Cart
             {itemCount > 0 ? <span className="cart-count">{itemCount}</span> : null}
-          </button>
+          </NavLink>
         </nav>
       </header>
 
       <main className="app-main">
-        <section aria-labelledby="products-heading">
-          <div className="section-header">
-            <h2 id="products-heading">Products</h2>
-            <span className="badge">Catalog</span>
-          </div>
-
-          <ProductGrid />
-        </section>
+        <Outlet />
       </main>
 
-      <CartPanel open={showCart} />
-
-      <footer className="app-footer">
-        <small className="muted-text">
-          Stack: React · Node.js · MongoDB
-        </small>
-      </footer>
     </div>
   );
 }

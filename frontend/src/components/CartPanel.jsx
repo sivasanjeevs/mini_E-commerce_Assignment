@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 
 export default function CartPanel({ open }) {
   const { items, total, updateQuantity, removeItem, clearCart } = useCart();
+  const navigate = useNavigate();
   const [checkoutState, setCheckoutState] = useState({
     loading: false,
     error: '',
@@ -31,11 +33,9 @@ export default function CartPanel({ open }) {
       }
 
       const data = await res.json();
-      setCheckoutState({
-        loading: false,
-        error: '',
-        breakdown: data,
-      });
+      clearCart();
+      setCheckoutState({ loading: false, error: '', breakdown: null });
+      navigate(`/order/${data.orderId}`, { state: { breakdown: data } });
     } catch (err) {
       setCheckoutState({
         loading: false,
@@ -63,7 +63,9 @@ export default function CartPanel({ open }) {
       </div>
 
       <p className="muted-text">
-        Spend over ₹150 in any category to get 10% off that category. Buy 3 or more of the
+        Spend over ₹150 in any category to get 10% off that category. 
+      </p>
+      <p className="muted-text">Buy 3 or more of the
         same product to get 5% off that product.
       </p>
 
@@ -121,44 +123,12 @@ export default function CartPanel({ open }) {
               onClick={handleCheckout}
               disabled={items.length === 0 || checkoutState.loading}
             >
-              {checkoutState.loading ? 'Calculating…' : 'Checkout'}
+              {checkoutState.loading ? 'Placing order…' : 'Place order'}
             </button>
           </div>
 
           {checkoutState.error ? (
             <p className="error-text">{checkoutState.error}</p>
-          ) : null}
-
-          {checkoutState.breakdown ? (
-            <div className="checkout-breakdown">
-              {checkoutState.breakdown.orderId ? (
-                <div className="checkout-row">
-                  <span className="muted-text">Order ID</span>
-                  <span>{checkoutState.breakdown.orderId}</span>
-                </div>
-              ) : null}
-              <div className="checkout-row">
-                <span className="muted-text">Subtotal</span>
-                <span>₹{checkoutState.breakdown.subtotal.toFixed(2)}</span>
-              </div>
-              {checkoutState.breakdown.discounts.length > 0 ? (
-                checkoutState.breakdown.discounts.map((d) => (
-                  <div key={d.label} className="checkout-row">
-                    <span className="muted-text">{d.label}</span>
-                    <span>-₹{d.amount.toFixed(2)}</span>
-                  </div>
-                ))
-              ) : (
-                <div className="checkout-row">
-                  <span className="muted-text">Discounts</span>
-                  <span>₹0.00</span>
-                </div>
-              )}
-              <div className="checkout-row checkout-row--total">
-                <span>Total</span>
-                <span>₹{checkoutState.breakdown.total.toFixed(2)}</span>
-              </div>
-            </div>
           ) : null}
         </>
       )}

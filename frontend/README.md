@@ -1,16 +1,49 @@
-# React + Vite
+## Frontend (React) – Simple E‑Commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React + Vite frontend for the simple e‑commerce demo.
 
-Currently, two official plugins are available:
+### Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React
+- React Router
+- Context API (for cart state)
+- Vite dev server
 
-## React Compiler
+### How to run
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+cd frontend
+npm install
+npm run dev      # usually http://localhost:5173
+```
 
-## Expanding the ESLint configuration
+Make sure the backend is running on `http://localhost:5000` so that product and checkout API calls succeed.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Routes and UI overview
+
+- `/products`
+  - Main product catalog page.
+  - Each card shows product name, category, and price.
+  - `Add to cart` button adds the product to the cart.
+- `/cart`
+  - Shows all cart items, quantities, and the subtotal.
+  - Lets you change quantity, remove items, or **Clear** the cart.
+  - Shows a note explaining the discount rules:
+    - 10% off any category where your spend is over ₹150.
+    - 5% off any product where you buy 3 or more units.
+  - **Place order** calls the backend `/api/checkout` endpoint.
+- `/order/:orderId`
+  - Order confirmation / bill page.
+  - Displays the order ID, subtotal, discount lines, and final total.
+
+### Header and navigation
+
+- The top center of the page shows:
+  - Title: `Simple E‑Commerce`
+  - Two discount badges:
+    - `10% off categories over ₹150`
+    - `5% off when you buy 3+ of a product`
+- Top‑right navigation:
+  - `Products` and `Cart` buttons (React Router `NavLink`s).
+  - Shows a cart badge with the total number of items.
+
