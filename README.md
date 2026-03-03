@@ -84,8 +84,8 @@ Then open the Vite dev server URL in your browser.
   - Frontend runs on `http://localhost:5173`.
   - MongoDB is reachable at `mongodb://127.0.0.1:27017/simple-ecommerce` (or whatever you configure as `MONGODB_URI`).
 - **Discount rules are fixed** and hard‑coded:
-  - 10% off any category where your spend is over ₹150.
-  - 5% off any product line where you buy 3 or more units.
+  - 10% off any category where your spend is over ₹10,000.
+  - 5% off any product line where you buy 5 or more units.
 - **Currency**: All prices and totals are in INR (₹).
 - **Data model is minimal**:
   - Products only have `name`, `price`, and `category`.
@@ -161,7 +161,7 @@ Then open the Vite dev server URL in your browser.
 
 1. On `/cart`, clicking **Place order** calls `POST /api/checkout` with the cart items.
 2. The backend:
-   - Applies the discount rules (10% per category over ₹150, 5% when you buy 3+ of the same product).
+   - Applies the discount rules (10% per category over ₹10,000, 5% when you buy 5+ of the same product).
    - Stores an `Order` document in MongoDB.
    - Returns `{ orderId, subtotal, discounts, total }`.
 3. The frontend:

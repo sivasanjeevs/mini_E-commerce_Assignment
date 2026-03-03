@@ -38,7 +38,7 @@ export async function calculatePricing(cartItems) {
 
   // Rule 1: Category threshold discount (generic).
   // For any category where the total value exceeds THRESHOLD, apply PERCENTAGE% off that category.
-  const CATEGORY_THRESHOLD = 150;
+  const CATEGORY_THRESHOLD = 10000;
   const CATEGORY_DISCOUNT_PERCENTAGE = 10;
 
   const categoryTotals = new Map();
@@ -57,14 +57,14 @@ export async function calculatePricing(cartItems) {
     }
   }
 
-  // Rule 2: Bulk discount for quantity >= 3 on a single product (5% off that product's total)
+  // Rule 2: Bulk discount for quantity >= 5 on a single product (5% off that product's total)
   const BULK_DISCOUNT_PERCENTAGE = 5;
 
   for (const line of lines) {
-    if (line.quantity >= 3) {
+    if (line.quantity >= 5) {
       const amount = (line.lineSubtotal * BULK_DISCOUNT_PERCENTAGE) / 100;
       discounts.push({
-        label: `Bulk discount on ${line.name} (${BULK_DISCOUNT_PERCENTAGE}% off)`,
+        label: `Bulk discount on ${line.name} (${BULK_DISCOUNT_PERCENTAGE}% off for 5+ units)`,
         amount,
       });
     }

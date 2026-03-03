@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ProductCard from './ProductCard.jsx';
 
-export default function ProductGrid() {
+export default function ProductGrid({ category }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -25,6 +25,11 @@ export default function ProductGrid() {
     fetchProducts();
   }, []);
 
+  const filteredProducts = useMemo(() => {
+    if (!category) return products;
+    return products.filter((product) => product.category === category);
+  }, [products, category]);
+
   if (loading) {
     return <p className="muted-text">Loading products…</p>;
   }
@@ -33,13 +38,17 @@ export default function ProductGrid() {
     return <p className="error-text">{error}</p>;
   }
 
-  if (products.length === 0) {
-    return <p className="muted-text">No products available.</p>;
+  if (filteredProducts.length === 0) {
+    return (
+      <p className="muted-text">
+        No products available{category ? ` for ${category}.` : '.'}
+      </p>
+    );
   }
 
   return (
     <div className="product-grid">
-      {products.map((product) => (
+      {filteredProducts.map((product) => (
         <ProductCard key={product._id || product.name} product={product} />
       ))}
     </div>
