@@ -6,38 +6,42 @@ This project is a small end‑to‑end e‑commerce demo with discounts, a produ
 - **Backend**: Node.js + Express in `backend`
 - **Database**: MongoDB via Mongoose (configured in `backend/src/config/db.js`)
 
-### Folder structure
+---
 
-- `frontend/`
-  - `src/main.jsx`: React entry point, sets up `BrowserRouter`, routes, and `CartProvider`
-  - `src/App.jsx`: Layout shell (header with discounts, product/cart toggle, footer)
-  - `src/pages/ProductsPage.jsx`: Product catalog page
-  - `src/pages/CartPage.jsx`: Cart page + checkout button
-  - `src/pages/OrderConfirmationPage.jsx`: Order bill page after placing an order
-  - `src/context/CartContext.jsx`: Cart state (add/remove/update/clear)
-  - `src/components/ProductGrid.jsx` / `ProductCard.jsx`: Product listing UI
-  - `src/components/CartPanel.jsx`: Cart line items and checkout action
-- `backend/`
-  - `.env.example`: Example `PORT` and `MONGODB_URI`
-  - `src/server.js`: Server entry (connects to MongoDB and starts HTTP server)
-  - `src/app.js`: Express app + routes wiring
-  - `src/config/db.js`: MongoDB connection helper
-  - `src/models/product.model.js`: Product schema
-  - `src/models/order.model.js`: Order schema
-  - `src/controllers/product.controller.js`: Product listing / seeding
-  - `src/controllers/checkout.controller.js`: Checkout calculation + order creation
-  - `src/controllers/order.controller.js`: View and delete orders
-  - `src/routes/product.routes.js`: `/api/products`
-  - `src/routes/checkout.routes.js`: `/api/checkout`
-  - `src/routes/order.routes.js`: `/api/orders`
+### Setup instructions
 
-## How to run everything
+- **Folder structure**
 
-### 1. Start MongoDB
+  - `frontend/`
+    - `src/main.jsx`: React entry point, sets up `BrowserRouter`, routes, and `CartProvider`
+    - `src/App.jsx`: Layout shell (header with discounts, product/cart toggle, footer)
+    - `src/pages/ProductsPage.jsx`: Product catalog page
+    - `src/pages/CartPage.jsx`: Cart page + checkout button
+    - `src/pages/OrderConfirmationPage.jsx`: Order bill page after placing an order
+    - `src/context/CartContext.jsx`: Cart state (add/remove/update/clear)
+    - `src/components/ProductGrid.jsx` / `ProductCard.jsx`: Product listing UI
+    - `src/components/CartPanel.jsx`: Cart line items and checkout action
 
-Make sure a MongoDB instance is running and that you have a connection string (URI), for example:
+    
+  - `backend/`
+    - `.env.example`: Example `PORT` and `MONGODB_URI`
+    - `src/server.js`: Server entry (connects to MongoDB and starts HTTP server)
+    - `src/app.js`: Express app + routes wiring
+    - `src/config/db.js`: MongoDB connection helper
+    - `src/models/product.model.js`: Product schema
+    - `src/models/order.model.js`: Order schema
+    - `src/controllers/product.controller.js`: Product listing / seeding
+    - `src/controllers/checkout.controller.js`: Checkout calculation + order creation
+    - `src/controllers/order.controller.js`: View and delete orders
+    - `src/routes/product.routes.js`: `/api/products`
+    - `src/routes/checkout.routes.js`: `/api/checkout`
+    - `src/routes/order.routes.js`: `/api/orders`
 
-- Local default: `mongodb://127.0.0.1:27017/simple-ecommerce`
+- **1. Start MongoDB**
+
+  Make sure a MongoDB instance is running and that you have a connection string (URI), for example:
+
+  - Local default: `mongodb://127.0.0.1:27017/simple-ecommerce`
 
 ### 2. Backend (API)
 
@@ -69,6 +73,69 @@ npm run dev      # usually http://localhost:5173
 ```
 
 Then open the Vite dev server URL in your browser.
+
+---
+
+### Assumptions made
+
+- **Single‑user demo**: No authentication or multi‑user handling; cart is per browser session only.
+- **Local development environment**:
+  - Backend runs on `http://localhost:5000`.
+  - Frontend runs on `http://localhost:5173`.
+  - MongoDB is reachable at `mongodb://127.0.0.1:27017/simple-ecommerce` (or whatever you configure as `MONGODB_URI`).
+- **Discount rules are fixed** and hard‑coded:
+  - 10% off any category where your spend is over ₹150.
+  - 5% off any product line where you buy 3 or more units.
+- **Currency**: All prices and totals are in INR (₹).
+- **Data model is minimal**:
+  - Products only have `name`, `price`, and `category`.
+  - Orders only store line items, discounts, and summary totals.
+
+---
+
+### Trade‑offs and design decisions
+
+- **Simple routing**:
+  - Uses React Router with three main routes: `/products`, `/cart`, `/order/:orderId`.
+  - `App.jsx` acts as the shared layout (header/footer and discount display) so the discount message is visible on all pages.
+- **State management**:
+  - Cart is implemented with a lightweight React Context (`CartContext.jsx`) instead of a heavier state library.
+  - Cart is **not** persisted to local storage; reloading the page clears it.
+- **Product seeding**:
+  - If the `products` collection is empty, `GET /api/products` seeds a few sample products on the first call.
+  - This keeps setup simple: you do not need to manually insert products for the demo.
+- **Order storage & retrieval**:
+  - `POST /api/checkout` performs pricing and discount calculation on the server and writes an `Order` document to MongoDB.
+  - The order confirmation page takes the `orderId` from the response and:
+    - Shows the breakdown passed from the checkout response.
+    - Can fall back to `GET /api/orders/:id` if needed.
+- **UI & styling**:
+  - UI is intentionally minimal but modern:
+    - Centered title “Simple E‑Commerce” with two discount badges.
+    - Badges use a subtle pulse animation to keep discounts highlighted on all pages.
+    - Top‑right “Products” / “Cart” toggle with a badge for cart item count.
+  - The cart page shows all cart items directly (no inner scroll) and uses a single page scroll instead.
+
+---
+
+### UI screenshots
+- **Products page**
+
+  ```markdown
+  ![Products page](assets/products-page.png)
+  ```
+
+- **Cart page**
+
+  ```markdown
+  ![Cart page](assets/cart-page.png)
+  ```
+
+- **Order confirmation (bill) page**
+
+  ```markdown
+  ![Order confirmation page](assets/order-confirmation-page.png)
+  ```
 
 ## Frontend behaviour and pages
 
