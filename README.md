@@ -37,7 +37,7 @@ This project is a small end‑to‑end e‑commerce demo with discounts, a produ
     - `src/routes/checkout.routes.js`: `/api/checkout`
     - `src/routes/order.routes.js`: `/api/orders`
 
-- **1. Start MongoDB**
+### 1. Start MongoDB
 
   Make sure a MongoDB instance is running and that you have a connection string (URI), for example:
 
@@ -98,17 +98,21 @@ Then open the Vite dev server URL in your browser.
 - **Simple routing**:
   - Uses React Router with three main routes: `/products`, `/cart`, `/order/:orderId`.
   - `App.jsx` acts as the shared layout (header/footer and discount display) so the discount message is visible on all pages.
+    
 - **State management**:
   - Cart is implemented with a lightweight React Context (`CartContext.jsx`) instead of a heavier state library.
   - Cart is **not** persisted to local storage; reloading the page clears it.
+    
 - **Product seeding**:
   - If the `products` collection is empty, `GET /api/products` seeds a few sample products on the first call.
   - This keeps setup simple: you do not need to manually insert products for the demo.
+    
 - **Order storage & retrieval**:
   - `POST /api/checkout` performs pricing and discount calculation on the server and writes an `Order` document to MongoDB.
   - The order confirmation page takes the `orderId` from the response and:
     - Shows the breakdown passed from the checkout response.
     - Can fall back to `GET /api/orders/:id` if needed.
+      
 - **UI & styling**:
   - UI is intentionally minimal but modern:
     - Centered title “Simple E‑Commerce” with two discount badges.
@@ -141,8 +145,8 @@ Then open the Vite dev server URL in your browser.
 - **Header (top center)**:
   - Shows the title `Simple E‑Commerce`
   - Under the title, two visible discount badges:
-    - `10% off categories over ₹150`
-    - `5% off when you buy 3+ of a product`
+    - `10% off categories over ₹10000`
+    - `5% off when you buy 5+ of a product`
 - **Top‑right toggle**:
   - `Products` and `Cart` are shown as navigation buttons (React Router `NavLink`s)
   - The active page is highlighted.
@@ -170,55 +174,4 @@ Then open the Vite dev server URL in your browser.
 4. The order bill page:
    - Reads the breakdown from navigation state if available.
    - If needed, fetches from `GET /api/orders/:id` to show the same data from the DB.
-
-## How to see data currently in the database
-
-You have two options:
-
-- **Option A – Use the API endpoints**
-  - Orders: `GET http://localhost:5000/api/orders`
-  - Products: `GET http://localhost:5000/api/products`
-  - You can call these using a browser, `curl`, Postman, or Insomnia.
-
-- **Option B – Use MongoDB tools directly**
-  - Using `mongosh` (Mongo shell), for example:
-
-    ```bash
-    mongosh "mongodb://127.0.0.1:27017/simple-ecommerce"
-    ```
-
-    Then inside the shell:
-
-    ```js
-    use('simple-ecommerce');
-    db.products.find();
-    db.orders.find();
-    ```
-
-  - Or use MongoDB Compass or any GUI to connect with the same URI.
-
-## How to delete all records in the DB
-
-Be careful: these operations are destructive.
-
-- **Delete all orders via API**:
-
-  ```bash
-  curl -X DELETE http://localhost:5000/api/orders
-  ```
-
-- **Delete records directly in MongoDB (using mongosh)**:
-
-  ```bash
-  mongosh "mongodb://127.0.0.1:27017/simple-ecommerce"
-  ```
-
-  Then run:
-
-  ```js
-  use('simple-ecommerce');
-  db.orders.deleteMany({});    // delete all orders
-  db.products.deleteMany({});  // delete all products (if you really want a clean DB)
-  ```
-
 
